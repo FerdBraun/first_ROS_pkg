@@ -16,16 +16,16 @@
 <!--Models-->
     <xacro:property name="base_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/base.dae" />
     <xacro:property name="arm_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/leg-section.dae" />
-    <!--
-	<link name="world"></link>
--->
-    <!--BODY
+    <!---->
+	<link name="world"></link> 
+
+    <!--BODY-->
 	<joint name="base" type="fixed">
-		<origin xyz="2.0 2.0 0.2" />
+		<origin xyz="0 0 0.3 " />
 		<parent link="world" />
 		<child link="base_link" />
 	</joint>
-    -->
+    
 	<link name="base_link">
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
