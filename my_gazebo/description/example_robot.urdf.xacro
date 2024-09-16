@@ -14,8 +14,8 @@
 
 
 <!--Models-->
-    <xacro:property name="base_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/base.dae" />
-    <xacro:property name="arm_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/leg-section.dae" />
+    <xacro:property name="base_path" value="$(find my_gazebo)/meshes/base.dae" />
+    <xacro:property name="arm_path" value="$(find my_gazebo)/meshes/leg-section.dae" />
     <!--
 	<link name="world"></link> 
     -->
