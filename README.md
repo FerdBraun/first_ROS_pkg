@@ -5,4 +5,4 @@
 6. Open ```src``` dir and clone this repo
 7. Go to the ```ros_dev``` dir and rebuild the workspace by running the same command
 8. source the dir by running ```source install/setup.bash```
-9. run ```ros2 launch my_gazebo gazebo_test.launch.py ```
+9. run ```ros2 launch my_gazebo gazebo_test.launch.py world:=~/Desktop/ros_dev/src/my_gazebo/world/test_world.world```. Dont forget to change the path to your ```ros_dev```
