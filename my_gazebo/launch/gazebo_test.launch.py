@@ -42,15 +42,48 @@ def generate_launch_description():
                     arguments=['-topic', 'robot_description',
                                 '-entity', 'INSECTOID'],
                     output='screen')
+    
 
 
+    command_sender_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_command_sender.py')
+
+    command_sender = Node(executable=command_sender_script,
+            name='spider_robot_command_sender',)
 
 
+    spider_robot_controller_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_controller.py')
 
+    spider_robot_controller = Node(executable=spider_robot_controller_script,
+            name='spider_robot_controller',)
+    
+
+
+    spider_robot_controllerV2_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_comannd_centerV2.py')
+
+    spider_robot_controllerV2 = Node(executable=spider_robot_controllerV2_script,
+            name='spider_robot_comannd_centerV2',
+            parameters=[{'use_sim_time': True}] )
+            
+    joint_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_trajectory_controller"],
+    )
+
+    joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+    )
 
     # Run the node
     return LaunchDescription([
         gazebo,
         node_robot_state_publisher,
-        spawn_entity
+        spawn_entity,
+        #command_sender,
+        #spider_robot_controller,
+        spider_robot_controllerV2,
+        joint_trajectory_controller_spawner,
+        joint_state_broadcaster
     ])

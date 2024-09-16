@@ -16,16 +16,16 @@
 <!--Models-->
     <xacro:property name="base_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/base.dae" />
     <xacro:property name="arm_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/leg-section.dae" />
-    <!---->
+    <!--
 	<link name="world"></link> 
-
-    <!--BODY-->
+    -->
+    <!--BODY
 	<joint name="base" type="fixed">
 		<origin xyz="0 0 0.3 " />
 		<parent link="world" />
 		<child link="base_link" />
 	</joint>
-    
+    -->
 	<link name="base_link">
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
@@ -277,5 +277,6 @@
 
 
     <xacro:include filename="example_gazebo.xacro" />
+    <xacro:include filename="ros2_control.xacro"/>
     
 </robot>
