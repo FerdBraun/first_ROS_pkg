@@ -14,8 +14,11 @@
 
 
 <!--Models-->
-    <xacro:property name="base_path" value="$(find my_gazebo)/meshes/base.dae" />
-    <xacro:property name="arm_path" value="$(find my_gazebo)/meshes/leg-section.dae" />
+    <xacro:property name="base_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/base1.dae" />
+    <xacro:property name="arm_path_1" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-1.dae" />
+    <xacro:property name="arm_path_2" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-2.dae" />
+    <xacro:property name="arm_path_3" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-3.dae" />
+    <xacro:property name="camera" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/kinect.dae" />
     <!--
 	<link name="world"></link> 
     -->
@@ -28,7 +31,7 @@
     -->
 	<link name="base_link">
 		<visual>
-			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
 			<geometry>
 				<mesh filename="${base_path}"/>
 			</geometry>
@@ -49,12 +52,12 @@
     <!---->
     <!--CAMERA-->
     <joint name="camera_joint" type="fixed">
-        <origin xyz="0 0.2 0.1" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0 -0.2 0.1" rpy="0 0 ${-pi/2}"/>
         <parent link="base_link"/>
         <child link="camera_link"/>        
     </joint>
-    <material name="white">
-        <color rgba="1 1 1 1"/>
+    <material name="black">
+        <color rgba="0 0 0 1"/>
     </material>
 
     <!-- camera_link describes the camera at the end of the arm -->
@@ -65,16 +68,16 @@
         <visual>
             <origin xyz="-0.03 0 0" rpy="0 0 0"/>
             <geometry>
-                <box size="0.06 0.15 0.15" />
-            </geometry>
-            <material name="white" />
+				<mesh filename="${camera}"/>
+			</geometry>
+            <material name="black" />
         </visual>
         <visual>
-            <origin xyz="0.03 0 0" rpy="0 ${pi/2} 0"/>
+            <origin xyz="-0.04 0 -0.04" rpy="0 0 0"/>
             <geometry>
-                <cylinder length="0.06" radius="0.04" />
+                <cylinder length="0.06" radius="0.01" />
             </geometry>
-            <material name="white" />
+            <material name="black" />
         </visual>
         <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0"/>
@@ -92,30 +95,30 @@
 		<color rgba="1 0.3 0.1 1"/>
 	</material>
     <!--LEG MACROS-->
-    <xacro:macro name="leg_section_joint" params="joint_name joint_axis joint_xyz joint_parent joint_child ">
+    <xacro:macro name="leg_section_joint" params="joint_name joint_axis joint_xyz joint_parent joint_child lower_limit upper_limit ">
 		<joint name="${joint_name}" type="revolute">
 		    <origin xyz="${joint_xyz}" />
 		    <parent link="${joint_parent}" />
 		    <child link="${joint_child}" />
 		    <axis xyz="${joint_axis}"/>
-		    <limit lower="${-(pi/4)}" upper="${pi/4}" velocity="100" effort="100"/>
+		    <limit lower="${lower_limit}" upper="${upper_limit}" velocity="100" effort="100"/>
             <dynamics damping="1.2" friction="1.2"/>
 	    </joint>
 
     </xacro:macro>
-    <xacro:macro name="leg_section_link" params="link_name link_xyz link_rpy">
+    <xacro:macro name="leg_section_link" params="link_name link_xyz link_rpy model">
         <link name="${link_name}">
 		    <visual>
 			    <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
 			    <geometry>
-			    	<mesh filename="${arm_path}"/>
+			    	<mesh filename="${model}"/>
 			    </geometry>
 			    <material name="orange" />
 		    </visual>
 		    <collision>
 			    <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
 			    <geometry>
-				    <mesh filename="${arm_path}"/>
+				    <mesh filename="${model}"/>
 			    </geometry>
 		    </collision>
 		    <xacro:inertial_box mass="0.5" x="0.09" y="0.02" z="0.2">
@@ -132,7 +135,7 @@
 
 
 	<joint name="LL-1-1" type="revolute">
-		<origin xyz="0.07554 -0.214663 0.08" />
+		<origin xyz="0.07 -0.154663 0.06" />
 		<parent link="base_link" />
 		<child link="LL-1-1_link" />
 		<axis xyz="0 0 1"/>
@@ -146,14 +149,14 @@
 		<visual>
 			<origin xyz="0.04 0 -0.04" rpy="0 ${-(pi/2)} 0"/>
 			<geometry>
-				<mesh filename="${arm_path}"/>
+				<mesh filename="${arm_path_1}"/>
 			</geometry>
 			<material name="orange" />
 		</visual>
 		<collision>
 			<origin xyz="0.04 0 -0.04" rpy="0 ${-(pi/2)} 0"/>
 			<geometry>
-				<mesh filename="${arm_path}"/>
+				<mesh filename="${arm_path_1}"/>
 			</geometry>
 		</collision>
 		<xacro:inertial_box mass="0.5" x="0.03" y="0.015" z="0.1">
@@ -162,116 +165,116 @@
 	</link>
 
 
-    <xacro:leg_section_joint joint_name="LL-1-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-1-1_link" joint_child="LL-1-2_link" />
+    <xacro:leg_section_joint joint_name="LL-1-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-1-1_link" joint_child="LL-1-2_link" lower_limit="${-pi}" upper_limit="0"  />
 
-    <xacro:leg_section_link link_name="LL-1-2_link" link_xyz="0.02 0 -0.04" link_rpy="0 ${-(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="LL-1-2_link" link_xyz="0.02 0 -0.04" link_rpy="${-(pi/6)} 0 ${(pi/2)}" model="${arm_path_2}" />
     
 
 
-    <xacro:leg_section_joint joint_name="LL-1-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-1-2_link" joint_child="LL-1-3_link" />
+    <xacro:leg_section_joint joint_name="LL-1-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-1-2_link" joint_child="LL-1-3_link" lower_limit="${-pi/2}" upper_limit="1.51" />
 
-    <xacro:leg_section_link link_name="LL-1-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>
+    <xacro:leg_section_link link_name="LL-1-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${-pi/2}" model="${arm_path_3}"/>
 
 
 
     <!--LEFT 2-nd-->
 
 
-    <xacro:leg_section_joint joint_name="LL-2-1" joint_axis="0 0 1" joint_xyz="0.07554 -0.01 0.08" joint_parent="base_link" joint_child="LL-2-1_link" />
+    <xacro:leg_section_joint joint_name="LL-2-1" joint_axis="0 0 1" joint_xyz="0.07 -0.01 0.06" joint_parent="base_link" joint_child="LL-2-1_link" lower_limit="${-pi/4}" upper_limit="${pi/4}" />
 
-    <xacro:leg_section_link link_name="LL-2-1_link" link_xyz="0.04 0 -0.04" link_rpy="0 ${-(pi/2)} 0"/>
+    <xacro:leg_section_link link_name="LL-2-1_link" link_xyz="0.04 0 -0.04" link_rpy="0 ${-(pi/2)} 0" model="${arm_path_1}" />
 
     
 
-    <xacro:leg_section_joint joint_name="LL-2-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-2-1_link" joint_child="LL-2-2_link" />
+    <xacro:leg_section_joint joint_name="LL-2-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-2-1_link" joint_child="LL-2-2_link" lower_limit="${-pi}" upper_limit="0" />
 
-    <xacro:leg_section_link link_name="LL-2-2_link" link_xyz="0.02 0 -0.04" link_rpy="0 ${-(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="LL-2-2_link" link_xyz="0.02 0 -0.04" link_rpy="${(-pi/6)} 0 ${(pi/2)}" model="${arm_path_2}"/>
     
 
 
-    <xacro:leg_section_joint joint_name="LL-2-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-2-2_link" joint_child="LL-2-3_link" />
+    <xacro:leg_section_joint joint_name="LL-2-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-2-2_link" joint_child="LL-2-3_link" lower_limit="${-pi/2}" upper_limit="1.51"/>
 
-    <xacro:leg_section_link link_name="LL-2-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>
+    <xacro:leg_section_link link_name="LL-2-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${-pi/2}" model="${arm_path_3}"/>
 
 
 <!--LEFT 3-nd-->
 
 
-    <xacro:leg_section_joint joint_name="LL-3-1" joint_axis="0 0 1" joint_xyz="0.07554 0.218646 0.08" joint_parent="base_link" joint_child="LL-3-1_link" />
+    <xacro:leg_section_joint joint_name="LL-3-1" joint_axis="0 0 1" joint_xyz="0.07 0.158646 0.06" joint_parent="base_link" joint_child="LL-3-1_link" lower_limit="${-pi/4}" upper_limit="${pi/4}" />
 
-    <xacro:leg_section_link link_name="LL-3-1_link" link_xyz="0.04 0 -0.04" link_rpy="0 ${-(pi/2)} 0"/>
+    <xacro:leg_section_link link_name="LL-3-1_link" link_xyz="0.04 0 -0.04" link_rpy="0 ${-(pi/2)} 0" model="${arm_path_1}"/>
 
     
 
-    <xacro:leg_section_joint joint_name="LL-3-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-3-1_link" joint_child="LL-3-2_link" />
+    <xacro:leg_section_joint joint_name="LL-3-2" joint_axis="0 1 0" joint_xyz="0.09 0 -0.04" joint_parent="LL-3-1_link" joint_child="LL-3-2_link" lower_limit="${-pi}" upper_limit="0" />
 
-    <xacro:leg_section_link link_name="LL-3-2_link" link_xyz="0.02 0 -0.04" link_rpy="0 ${-(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="LL-3-2_link" link_xyz="0.02 0 -0.04" link_rpy="${(-pi/6)} 0 ${(pi/2)}" model="${arm_path_2}"/>
     
 
 
-    <xacro:leg_section_joint joint_name="LL-3-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-3-2_link" joint_child="LL-3-3_link" />
+    <xacro:leg_section_joint joint_name="LL-3-3" joint_axis="0 1 0" joint_xyz="0.04 0 -0.08" joint_parent="LL-3-2_link" joint_child="LL-3-3_link" lower_limit="${-pi/2}" upper_limit="1.51" />
 
-    <xacro:leg_section_link link_name="LL-3-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>
+    <xacro:leg_section_link link_name="LL-3-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${-pi/2}" model="${arm_path_3}"/>
 
 <!--RIGHT 1-nd-->
 
 
-    <xacro:leg_section_joint joint_name="RL-1-1" joint_axis="0 0 1" joint_xyz="-0.075 -0.218646 0.08" joint_parent="base_link" joint_child="RL-1-1_link" />
+    <xacro:leg_section_joint joint_name="RL-1-1" joint_axis="0 0 1" joint_xyz="-0.07 -0.158646 0.06" joint_parent="base_link" joint_child="RL-1-1_link" lower_limit="${-pi/4}" upper_limit="${pi/4}" />
 
-    <xacro:leg_section_link link_name="RL-1-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0"/>
+    <xacro:leg_section_link link_name="RL-1-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0" model="${arm_path_1}"/>
 
     
 
-    <xacro:leg_section_joint joint_name="RL-1-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-1-1_link" joint_child="RL-1-2_link" />
+    <xacro:leg_section_joint joint_name="RL-1-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-1-1_link" joint_child="RL-1-2_link" lower_limit="0" upper_limit="${pi}" />
 
-    <xacro:leg_section_link link_name="RL-1-2_link" link_xyz="-0.02 0 -0.04" link_rpy="0 ${(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="RL-1-2_link" link_xyz="-0.02 0 -0.04" link_rpy="${(pi/6)} 0 ${(pi/2)}" model="${arm_path_2}"/>
     
 
 
-    <xacro:leg_section_joint joint_name="RL-1-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-1-2_link" joint_child="RL-1-3_link" />
+    <xacro:leg_section_joint joint_name="RL-1-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-1-2_link" joint_child="RL-1-3_link" lower_limit="-1.51" upper_limit="${pi/2}" />
 
-    <xacro:leg_section_link link_name="RL-1-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>    
+    <xacro:leg_section_link link_name="RL-1-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${pi/2}" model="${arm_path_3}"/>    
 
 
 <!--RIGHT 2-nd-->
 
 
-    <xacro:leg_section_joint joint_name="RL-2-1" joint_axis="0 0 1" joint_xyz="-0.075 -0.01 0.08" joint_parent="base_link" joint_child="RL-2-1_link" />
+    <xacro:leg_section_joint joint_name="RL-2-1" joint_axis="0 0 1" joint_xyz="-0.07 -0.01 0.06" joint_parent="base_link" joint_child="RL-2-1_link" lower_limit="${-pi/4}" upper_limit="${pi/4}" />
 
-    <xacro:leg_section_link link_name="RL-2-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0"/>
+    <xacro:leg_section_link link_name="RL-2-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0" model="${arm_path_1}"/>
 
     
 
-    <xacro:leg_section_joint joint_name="RL-2-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-2-1_link" joint_child="RL-2-2_link" />
+    <xacro:leg_section_joint joint_name="RL-2-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-2-1_link" joint_child="RL-2-2_link" lower_limit="0" upper_limit="${pi}" />
 
-    <xacro:leg_section_link link_name="RL-2-2_link" link_xyz="-0.02 0 -0.04" link_rpy="0 ${(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="RL-2-2_link" link_xyz="-0.02 0 -0.04" link_rpy="${(pi/6)} 0 ${(pi/2)}" model="${arm_path_2}"/>
     
 
 
-    <xacro:leg_section_joint joint_name="RL-2-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-2-2_link" joint_child="RL-2-3_link" />
+    <xacro:leg_section_joint joint_name="RL-2-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-2-2_link" joint_child="RL-2-3_link" lower_limit="-1.51" upper_limit="${pi/2}" />
 
-    <xacro:leg_section_link link_name="RL-2-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>    
+    <xacro:leg_section_link link_name="RL-2-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${pi/2}" model="${arm_path_3}"/>    
 
 
 
 <!--RIGHT 3-nd-->
 
 
-    <xacro:leg_section_joint joint_name="RL-3-1" joint_axis="0 0 1" joint_xyz="-0.075 0.218646 0.08" joint_parent="base_link" joint_child="RL-3-1_link" />
+    <xacro:leg_section_joint joint_name="RL-3-1" joint_axis="0 0 1" joint_xyz="-0.07 0.158646 0.06" joint_parent="base_link" joint_child="RL-3-1_link" lower_limit="${-pi/4}" upper_limit="${pi/4}" />
 
-    <xacro:leg_section_link link_name="RL-3-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0"/>
+    <xacro:leg_section_link link_name="RL-3-1_link" link_xyz="-0.04 0 -0.04" link_rpy="0 ${(pi/2)} 0" model="${arm_path_1}"/>
 
     
 
-    <xacro:leg_section_joint joint_name="RL-3-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-3-1_link" joint_child="RL-3-2_link" />
+    <xacro:leg_section_joint joint_name="RL-3-2" joint_axis="0 1 0" joint_xyz="-0.08 0 -0.04" joint_parent="RL-3-1_link" joint_child="RL-3-2_link" lower_limit="0" upper_limit="${pi}" />
 
-    <xacro:leg_section_link link_name="RL-3-2_link" link_xyz="-0.02 0 -0.04" link_rpy="0 ${(pi/6)} 0"/>
+    <xacro:leg_section_link link_name="RL-3-2_link" link_xyz="-0.02 0 -0.04" link_rpy="${(pi/6)} 0 ${(pi/2)}" model="${arm_path_2}"/>
     
 
 
-    <xacro:leg_section_joint joint_name="RL-3-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-3-2_link" joint_child="RL-3-3_link" />
+    <xacro:leg_section_joint joint_name="RL-3-3" joint_axis="0 1 0" joint_xyz="-0.04 0 -0.08" joint_parent="RL-3-2_link" joint_child="RL-3-3_link" lower_limit="-1.51" upper_limit="${pi/2}" />
 
-    <xacro:leg_section_link link_name="RL-3-3_link" link_xyz="0 0 -0.04" link_rpy="0 0 0"/>    
+    <xacro:leg_section_link link_name="RL-3-3_link" link_xyz="0 0 -0.06" link_rpy="0 0 ${pi/2}" model="${arm_path_3}"/>    
 
 
 
