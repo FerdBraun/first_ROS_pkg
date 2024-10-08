@@ -55,7 +55,7 @@
 		    <parent link="${joint_parent}" />
 		    <child link="${joint_child}" />
 		    <axis xyz="${joint_axis}"/>
-		    <limit lower="${lower_limit}" upper="${upper_limit}"  velocity="5.236" effort="0.92"/>
+		    <limit lower="${lower_limit}" upper="${upper_limit}"  velocity="50" effort="5"/>
             <dynamics damping="1.7" friction="1.7"/>
 	    </joint>
 

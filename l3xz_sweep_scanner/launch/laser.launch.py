@@ -10,18 +10,18 @@ def generate_launch_description():
       namespace='l3xz',
       output='screen',
       parameters=[
-          {'topic' : 'laser'},
+          {'topic' : 'Laser'},
           {'serial_port' : '/dev/ttyUSB0'},
           {'rotation_speed': 2},
           {'sample_rate': 1000},
-          {'frame_id' : 'laser_link'}
+          {'frame_id' : 'laser_frame'}
       ]
     ),
     Node(package = "tf2_ros",
          executable = "static_transform_publisher",
-         name="base_link_to_laser_link",
+         name="robot_link_to_laser_frame",
          namespace='l3xz',
          output='screen',
-         arguments = ["0.06", "0", "0.8", "0", "0", "0", "base_link", "laser_link"]
+         arguments = ["0.06", "0", "0.2", "0", "0", "0", "robot_link", "laser_frame"]
     )
   ])

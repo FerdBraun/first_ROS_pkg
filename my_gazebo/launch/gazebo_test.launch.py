@@ -1,3 +1,4 @@
+
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -42,20 +43,7 @@ def generate_launch_description():
                     arguments=['-topic', 'robot_description',
                                 '-entity', 'INSECTOID'],
                     output='screen')
-    
-
-
-    command_sender_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_command_sender.py')
-
-    command_sender = Node(executable=command_sender_script,
-            name='spider_robot_command_sender',)
-
-
-    spider_robot_controller_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_controller.py')
-
-    spider_robot_controller = Node(executable=spider_robot_controller_script,
-            name='spider_robot_controller',)
-    
+       
 
 
     spider_robot_controllerV2_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_comannd_centerV2.py')
@@ -63,19 +51,38 @@ def generate_launch_description():
     spider_robot_controllerV2 = Node(executable=spider_robot_controllerV2_script,
             name='spider_robot_comannd_centerV2',
             parameters=[{'use_sim_time': True}] )
-            
+    
+
+
+    
+    gzrm_script = os.path.join(get_package_share_directory(pkg_name), 'topics/gazebo_robot_movement.py')
+
+    gzrm = Node(executable=gzrm_script,
+            name='gzrm',
+            parameters=[{'use_sim_time': True}] )
+
+
+
+
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
         arguments=["joint_trajectory_controller"],
+        parameters=[{'use_sim_time': True}] ,
     )
 
-    joint_state_broadcaster = Node(
+    joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
         arguments=["joint_state_broadcaster"],
+        parameters=[{'use_sim_time': True}] ,
     )
 
+    lidar_odom_sim_script = os.path.join(get_package_share_directory(pkg_name), 'topics/lazerOdometry_sim.py')
+    lidar_odom_sim = Node(executable=lidar_odom_sim_script,
+            name='lidar_odom_sim',
+            parameters=[{'use_sim_time': True}] )
+    
     # Run the node
     return LaunchDescription([
         gazebo,
@@ -85,5 +92,7 @@ def generate_launch_description():
         #spider_robot_controller,
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
-        joint_state_broadcaster
+        joint_state_broadcaster_spawner,
+        lidar_odom_sim,
+        #gzrm
     ])
