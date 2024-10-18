@@ -9,7 +9,7 @@ class TrajectoryPublisher(Node):
     def __init__(self):
         super().__init__('trajectory_publisher')
         self.publisher = self.create_publisher(JointTrajectory, '/joint_trajectory_controller/joint_trajectory', 10)
-        self.timer = self.create_timer(2.0, self.timer_callback)  # Увеличим интервал до 2 секунд для наглядности
+        self.timer = self.create_timer(1.0, self.timer_callback)  # Увеличим интервал до 2 секунд для наглядности
         self.step_count = 0  # Счетчик шагов
 
     def timer_callback(self):
@@ -34,58 +34,69 @@ class TrajectoryPublisher(Node):
         msg.points.append(point)
 
         self.publisher.publish(msg)
-        self.get_logger().info(f'Published trajectory with step count: {self.step_count}')
+        #self.get_logger().info(f'Published trajectory with step count: {self.step_count}')
 
         # Увеличиваем счетчик шагов
         self.step_count += 1
-        if self.step_count >= 3:  # Возвращаемся к началу цикла после 6 шагов
+        if self.step_count >= 5:  # Возвращаемся к началу цикла после 6 шагов
             self.step_count = 0
 
     def get_leg_positions(self, step_count):
         # Определяем позиции для каждой ноги в зависимости от шага
-        positions = [0.0, 0.0, 0.0] * 6  # Исходное положение
+        positions = [0.4, 1.0, 0.0,
+                     0.0, 0.0, 0.0,
+                     0.4 ,1.0, 0.0,
+                     -0.0, -0.0, -0.0,
+                     -0.4, -1.0, -0.0,
+                     -0.0, -0.0, -0.0,]  # Исходное положение
 
         if step_count == 0:
-            
-            positions[3:6] = [0.7, 0.0, 0.0] 
-            positions[0:3] = [0.7, 0.0, 0.0] 
-            positions[6:9] = [0.7, 0.0, 0.0] 
+            positions[0:3] = [0.4, 1.0, 0.0] 
+            positions[3:6] = [0.0, 0.0, 0.0]
+            positions[6:9] = [0.4, 1.0, 0.0] 
 
 
-            positions[9:12] = [-0.7, -0.0, -0.0] 
-            positions[12:15] = [-0.7, 0.0, -0.0]
-            positions[15:18] = [-0.7, -0.0, -0.0] 
-        #     positions[0:3] = [0.3, 0.4, 0.4]  # Поднимаем первую ногу
+            positions[9:12] = [-0.0, -0.0, -0.0] 
+            positions[12:15] = [-0.4, -1.0, -0.0]
+            positions[15:18] = [-0.0, -0.0, -0.0] 
+     # Поднимаем первую ногу
         elif step_count == 1:
-            positions[12:15] = [-0.0, 0.0, -0.0] 
+            positions[0:3] = [0.4, 0.0, 0.0] 
+            positions[3:6] = [0.0, 0.0, 0.0] 
+            positions[6:9] = [0.4, 0.0, 0.0] 
+
+
+            positions[9:12] = [-0.0, -0.0, -0.0] 
+            positions[12:15] = [-0.4, -0.0, -0.0]
+            positions[15:18] = [-0.0, -0.0, -0.0] 
+  # Поднимаем вторую ногу
+        elif step_count == 2:
             positions[0:3] = [0.0, 0.0, 0.0] 
+            positions[3:6] = [0.4, 1.0, 0.0] 
             positions[6:9] = [0.0, 0.0, 0.0] 
 
 
-            positions[9:12] = [0.0, -0.0, -0.0] 
-            positions[3:6] = [0.0, 0.0, 0.0] 
-            positions[15:18] = [0.0, -0.0, -0.0] 
-            # positions[9:12] = [-0.3, -0.4, -0.4] 
-            # positions[3:6] = [0.3, 0.4, 0.4] 
-            # positions[15:18] = [-0.3, -0.4, -0.4]    
+            positions[9:12] = [-0.4, -1.0, -0.0] 
+            positions[12:15] = [-0.0, -0.0, -0.0]
+            positions[15:18] = [-0.4, -1.0, -0.0] 
+        elif step_count == 3:
+            positions[0:3] = [0.0, 0.0, 0.0] 
+            positions[3:6] = [0.4, 0.0, 0.0] 
+            positions[6:9] = [0.0, 0.0, 0.0] 
 
 
-            # positions[12:15] = [0.0, 0.0, 0.0] 
-            # positions[0:3] = [0.0, 0.0, 0.0] 
-            # positions[6:9] = [0.0, 0.0, 0.0]   # Поднимаем вторую ногу
-        # elif step_count == 2:
-        #     positions[3:6] = [0.2, 0.3, 0.3]  # Опускаем вторую ногу
-        #     positions[6:9] = [0.1, 0.4, 0.4]  # Поднимаем третью ногу
-        # elif step_count == 3:
-        #     positions[6:9] = [0.2, 0.3, 0.3]  # Опускаем третью ногу
-        #     positions[9:12] = [0.1, -0.4, -0.4]  # Поднимаем четвертую ногу
-        # elif step_count == 4:
-        #     positions[9:12] = [0.2, -0.3, -0.3]  # Опускаем четвертую ногу
-        #     positions[12:15] = [0.1, -0.4, -0.4]  # Поднимаем пятую ногу
-        # elif step_count == 5:
-        #     positions[12:15] = [0.2, -0.3, -0.3]  # Опускаем пятую ногу
-        #     positions[15:18] = [0.1, -0.4, -0.4]  # Поднимаем шестую ногу
+            positions[9:12] = [-0.4, -0.0, -0.0] 
+            positions[12:15] = [-0.0, -0.0, -0.0]
+            positions[15:18] = [-0.4, -0.0, -0.0] 
+        elif step_count == 4:
+            positions[0:3] = [0.4, 1.0, 0.0] 
+            positions[3:6] = [0.0, 0.0, 0.0]
+            positions[6:9] = [0.4, 1.0, 0.0] 
 
+
+            positions[9:12] = [-0.0, -0.0, -0.0] 
+            positions[12:15] = [-0.4, -1.0, -0.0]
+            positions[15:18] = [-0.0, -0.0, -0.0]     
         return positions
 
 def main(args=None):

@@ -1,0 +1,17 @@
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/lib/l3xz_sweep_scanner/l3xz_sweep_scanner_node
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/launch/laser.launch.py
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/ament_index/resource_index/package_run_dependencies/l3xz_sweep_scanner
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/ament_index/resource_index/parent_prefix_path/l3xz_sweep_scanner
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/environment/ament_prefix_path.sh
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/environment/ament_prefix_path.dsv
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/environment/path.sh
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/environment/path.dsv
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/local_setup.bash
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/local_setup.sh
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/local_setup.zsh
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/local_setup.dsv
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/package.dsv
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/ament_index/resource_index/packages/l3xz_sweep_scanner
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/cmake/l3xz_sweep_scannerConfig.cmake
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/cmake/l3xz_sweep_scannerConfig-version.cmake
+/home/zega/Desktop/ros_dev/src/install/l3xz_sweep_scanner/share/l3xz_sweep_scanner/package.xml

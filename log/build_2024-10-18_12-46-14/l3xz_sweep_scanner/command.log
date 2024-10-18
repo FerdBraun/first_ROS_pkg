@@ -1,0 +1,4 @@
+Invoking command in '/home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --build /home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner -- -j6 -l6
+Invoked command in '/home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --build /home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner -- -j6 -l6
+Invoking command in '/home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --install /home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner
+Invoked command in '/home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --install /home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner

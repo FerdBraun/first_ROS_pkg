@@ -1,0 +1,73 @@
+[0.035s] Invoking command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake /home/zega/Desktop/ros_dev/src/my_gazebo -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/zega/Desktop/ros_dev/src/install/my_gazebo
+[0.361s] -- The C compiler identification is GNU 9.4.0
+[0.432s] -- The CXX compiler identification is GNU 9.4.0
+[0.437s] -- Check for working C compiler: /usr/bin/cc
+[0.530s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.531s] -- Detecting C compiler ABI info
+[0.622s] -- Detecting C compiler ABI info - done
+[0.637s] -- Detecting C compile features
+[0.641s] -- Detecting C compile features - done
+[0.645s] -- Check for working CXX compiler: /usr/bin/c++
+[0.723s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.724s] -- Detecting CXX compiler ABI info
+[0.809s] -- Detecting CXX compiler ABI info - done
+[0.823s] -- Detecting CXX compile features
+[0.823s] -- Detecting CXX compile features - done
+[0.999s] -- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+[1.022s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[1.022s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.219s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[1.275s] -- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/share/ament_lint_auto/cmake)
+[1.352s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.355s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.356s] -- Added test 'lint_cmake' to check CMake code style
+[1.356s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[1.358s] -- Added test 'xmllint' to check XML markup files
+[1.360s] -- Configuring done
+[1.363s] -- Generating done
+[1.364s] -- Build files have been written to: /home/zega/Desktop/ros_dev/src/build/my_gazebo
+[1.367s] Invoked command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake /home/zega/Desktop/ros_dev/src/my_gazebo -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/zega/Desktop/ros_dev/src/install/my_gazebo
+[1.371s] Invoking command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --build /home/zega/Desktop/ros_dev/src/build/my_gazebo -- -j6 -l6
+[1.405s] Invoked command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --build /home/zega/Desktop/ros_dev/src/build/my_gazebo -- -j6 -l6
+[1.436s] Invoking command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --install /home/zega/Desktop/ros_dev/src/build/my_gazebo
+[1.442s] -- Install configuration: ""
+[1.443s] -- Execute custom install script
+[1.443s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/launch/RVIZsim.launch.py
+[1.451s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/launch/gazebo_test.launch.py
+[1.459s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/controllers.yaml
+[1.466s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/example_gazebo.xacro
+[1.474s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/example_robot.urdf.xacro
+[1.481s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/lidar.xacro
+[1.489s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/mapper_params_online_async.yaml
+[1.497s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/patterns.xacro
+[1.504s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/description/ros2_control.xacro
+[1.512s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/base.dae
+[1.520s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/base1.dae
+[1.527s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/kinect.dae
+[1.534s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/l-1.dae
+[1.541s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/l-2.dae
+[1.550s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/l-3.dae
+[1.557s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/meshes/leg-section.dae
+[1.565s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/rviz_config/rviz_view.rviz
+[1.573s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/world/test_world.world
+[1.581s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/topics/gazebo_robot_movement.py
+[1.590s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/topics/lazerOdometry_sim.py
+[1.598s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/topics/spider_robot_comannd_centerV2.py
+[1.605s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/topics/spider_robot_command_sender.py
+[1.613s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/topics/spider_robot_controller.py
+[1.622s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/ament_index/resource_index/package_run_dependencies/my_gazebo
+[1.629s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/ament_index/resource_index/parent_prefix_path/my_gazebo
+[1.637s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/environment/ament_prefix_path.sh
+[1.644s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/environment/ament_prefix_path.dsv
+[1.652s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/environment/path.sh
+[1.660s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/environment/path.dsv
+[1.668s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/local_setup.bash
+[1.676s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/local_setup.sh
+[1.684s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/local_setup.zsh
+[1.692s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/local_setup.dsv
+[1.699s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/package.dsv
+[1.707s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/ament_index/resource_index/packages/my_gazebo
+[1.716s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/cmake/my_gazeboConfig.cmake
+[1.723s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/cmake/my_gazeboConfig-version.cmake
+[1.731s] -- Symlinking: /home/zega/Desktop/ros_dev/src/install/my_gazebo/share/my_gazebo/package.xml
+[1.740s] Invoked command in '/home/zega/Desktop/ros_dev/src/build/my_gazebo' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake --install /home/zega/Desktop/ros_dev/src/build/my_gazebo

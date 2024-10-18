@@ -1,0 +1,4 @@
+source;share/l3xz_sweep_scanner/local_setup.bash
+source;share/l3xz_sweep_scanner/local_setup.dsv
+source;share/l3xz_sweep_scanner/local_setup.sh
+source;share/l3xz_sweep_scanner/local_setup.zsh

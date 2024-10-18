@@ -78,11 +78,17 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}] ,
     )
 
-    lidar_odom_sim_script = os.path.join(get_package_share_directory(pkg_name), 'topics/lazerOdometry_sim.py')
-    lidar_odom_sim = Node(executable=lidar_odom_sim_script,
-            name='lidar_odom_sim',
+    IMU_odom_sim_script = os.path.join(get_package_share_directory(pkg_name), 'topics/IMU_odom_sim.py')
+    IMU_odom_sim = Node(executable=IMU_odom_sim_script,
+            name='IMU_odom_sim',
             parameters=[{'use_sim_time': True}] )
-    
+    # Include SLAM Toolbox launch
+    slam_toolbox = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py']),
+        launch_arguments={'params_file': os.path.join(get_package_share_directory(pkg_name), 'description/mapper_params_online_async.yaml'),
+                          'use_sim_time': 'true'}.items()
+    )
     # Run the node
     return LaunchDescription([
         gazebo,
@@ -93,6 +99,6 @@ def generate_launch_description():
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
-        lidar_odom_sim,
-        #gzrm
+        IMU_odom_sim,
+        slam_toolbox
     ])

@@ -1,0 +1,9 @@
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/install/local.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/install.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/list_install_components.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/rebuild_cache.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/edit_cache.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/test.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/install/strip.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/my_gazebo_uninstall.dir
+/home/zega/Desktop/ros_dev/src/build/my_gazebo/CMakeFiles/uninstall.dir

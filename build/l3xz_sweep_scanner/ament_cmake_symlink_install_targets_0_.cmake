@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_targets("TARGET_FILES" "/home/zega/Desktop/ros_dev/src/build/l3xz_sweep_scanner/l3xz_sweep_scanner_node" "TARGETS" "l3xz_sweep_scanner_node" "DESTINATION" "lib/l3xz_sweep_scanner")

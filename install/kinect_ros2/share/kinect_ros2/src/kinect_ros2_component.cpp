@@ -1,0 +1,1 @@
+/home/zega/Desktop/ros_dev/src/kinect_ros2/src/kinect_ros2_component.cpp
