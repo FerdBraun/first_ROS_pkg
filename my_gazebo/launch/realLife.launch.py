@@ -82,18 +82,18 @@ def generate_launch_description():
     slam_toolbox = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py']),
-        launch_arguments={'params_file': os.path.join(get_package_share_directory(pkg_name), 'description/mapper_params_online_async.yaml'),
+        launch_arguments={'params_file': os.path.join(get_package_share_directory(pkg_name), 'description/IRL_mapper_params_online_async.yaml'),
                           'use_sim_time': 'true'}.items()
     )
     # Run the node
     return LaunchDescription([
-        gazebo,
-        node_robot_state_publisher,
-        spawn_entity,
+        #gazebo,
+        #node_robot_state_publisher,
+        #spawn_entity,
         #command_sender,
         #spider_robot_controller,
-        spider_robot_controllerV2,
-        joint_trajectory_controller_spawner,
-        joint_state_broadcaster_spawner,
+        #spider_robot_controllerV2,
+        #joint_trajectory_controller_spawner,
+        #joint_state_broadcaster_spawner,
         slam_toolbox
     ])

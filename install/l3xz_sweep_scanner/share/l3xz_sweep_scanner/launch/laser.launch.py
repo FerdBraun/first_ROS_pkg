@@ -1,1 +1,0 @@
-/home/zega/Desktop/ros_dev/src/l3xz_sweep_scanner/launch/laser.launch.py

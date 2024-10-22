@@ -1,1 +1,0 @@
-/home/zega/Desktop/ros_dev/src/build/kinect_ros2/ament_cmake_core/kinect_ros2Config-version.cmake

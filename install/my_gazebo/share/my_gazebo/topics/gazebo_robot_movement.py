@@ -1,1 +1,0 @@
-/home/zega/Desktop/ros_dev/src/my_gazebo/topics/gazebo_robot_movement.py

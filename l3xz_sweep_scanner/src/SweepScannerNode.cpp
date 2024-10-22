@@ -90,12 +90,16 @@ void SweepScannerNode::scannerThreadFunc() try
     laser_scan_msg.range_min       = 0.0;
     laser_scan_msg.range_max       = 40.0;
 
-    laser_scan_msg.ranges.assign(scan.samples.size(), std::numeric_limits<float>::infinity());
+    size_t max_samples = samples_per_rotation ;
+    laser_scan_msg.ranges.assign(max_samples, std::numeric_limits<float>::infinity());
 
     size_t idx = 0;
     for (auto [angle_milli_deg, distance_cm, signal_strength] : scan.samples) {
       laser_scan_msg.ranges[idx] = static_cast<float>(distance_cm) / 100.0;
       idx++;
+      
+      // Ограничиваем количество элементов в ranges
+      if (idx >= max_samples) break;
     }
 
     /* Publish the laser scan. */

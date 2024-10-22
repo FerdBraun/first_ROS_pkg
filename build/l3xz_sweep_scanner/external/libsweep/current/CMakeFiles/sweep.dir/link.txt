@@ -1,2 +1,0 @@
-/usr/bin/ar qc libsweep.a  CMakeFiles/sweep.dir/src/unix/serial.cc.o CMakeFiles/sweep.dir/src/protocol.cc.o CMakeFiles/sweep.dir/src/sweep.cc.o
-/usr/bin/ranlib libsweep.a

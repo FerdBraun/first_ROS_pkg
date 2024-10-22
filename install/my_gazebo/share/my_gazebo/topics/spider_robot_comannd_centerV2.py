@@ -1,1 +1,0 @@
-/home/zega/Desktop/ros_dev/src/my_gazebo/topics/spider_robot_comannd_centerV2.py
