@@ -5,11 +5,11 @@ from pynput import keyboard
 
 def on_press(key):
     try:
-        if key.char == 'a':
+        if key.char == 'd':
             msg = String()
             msg.data = 'L'
             publisher.publish(msg)
-        elif key.char == 'd':
+        elif key.char == 'a':
             msg = String()
             msg.data = 'R'
             publisher.publish(msg)
