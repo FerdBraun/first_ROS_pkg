@@ -53,17 +53,6 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}] )
     
 
-
-    
-    gzrm_script = os.path.join(get_package_share_directory(pkg_name), 'topics/gazebo_robot_movement.py')
-
-    gzrm = Node(executable=gzrm_script,
-            name='gzrm',
-            parameters=[{'use_sim_time': True}] )
-
-
-
-
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
@@ -95,5 +84,5 @@ def generate_launch_description():
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
-        slam_toolbox
+        #slam_toolbox
     ])

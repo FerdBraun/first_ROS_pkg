@@ -1,52 +1,91 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
+from gazebo_msgs.srv import SetEntityState
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist
 from std_msgs.msg import String
-from gazebo_msgs.srv import ApplyBodyWrench
+import math
 
-import rclpy
-from rclpy.node import Node
-from gazebo_msgs.srv import ApplyBodyWrench
-from geometry_msgs.msg import Wrench
-
-class ForceApplier(Node):
+class ModelMover(Node):
     def __init__(self):
-        super().__init__('force_applier')
-        self.client = self.create_client(ApplyBodyWrench, '/gazebo/apply_body_wrench')
-        self.get_logger().info('Waiting for service /gazebo/apply_body_wrench...')
+        super().__init__('model_mover')
+        self.client = self.create_client(SetEntityState, '/demo/set_entity_state')
         while not self.client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Service not available, waiting again...')
+            self.get_logger().info('Service not available, waiting...')
+        
+        self.position = Point(x=0.0, y=0.0, z=0.0)
+        self.orientation = Quaternion(w=1.0, x=0.0, y=0.0, z=0.0)
+        
+        self.subscription = self.create_subscription(
+            String,
+            'spider_robot/command',
+            self.command_callback,
+            10)
+        
+        self.future = None
 
-    def apply_force(self):
-        # Create the request for the ApplyBodyWrench service
-        request = ApplyBodyWrench.Request()
-        request.body_name = 'base_link'
-        request.reference_frame = 'base_link'  # Assuming the force is applied to the base link
-        request.wrench.force.x = 0.0
-        request.wrench.force.y = 0.0
-        request.wrench.force.z = 0.0
-        request.wrench.torque.x = 0.0
-        request.wrench.torque.y = 0.0
-        request.wrench.torque.z = 0.0
-        request.start_time.sec = 0
-        request.start_time.nanosec = 0
-        request.duration.sec = 10
-        request.duration.nanosec = 0
+    def move_model(self):
+        if self.future is not None and self.future.done():
+            try:
+                result = self.future.result()
+                if result is not None:
+                    self.get_logger().info('Model moved successfully')
+                else:
+                    self.get_logger().error('Failed to move model')
+            except Exception as e:
+                self.get_logger().error(f'Service call failed: {e}')
+            finally:
+                self.future = None
 
-        future = self.client.call_async(request)
-        rclpy.spin_until_future_complete(self, future)
+    def command_callback(self, msg):
+        command = msg.data.upper()
+        self.get_logger().info(f'Received command: {command}')
 
-        if future.result() is not None:
-            self.get_logger().info('Force applied successfully')
+        # Обновление позиции и ориентации
+        if command == 'F':
+            self.position.y -= 0.1
+        elif command == 'B':
+            self.position.y += 0.1
+        elif command == 'L':
+            current_yaw = 2 * math.acos(self.orientation.w)
+            new_yaw = current_yaw - math.radians(10)
+            self.orientation.w = math.cos(new_yaw / 2)
+            self.orientation.z = math.sin(new_yaw / 2)
+        elif command == 'R':
+            current_yaw = 2 * math.acos(self.orientation.w)
+            new_yaw = current_yaw + math.radians(10)
+            self.orientation.w = math.cos(new_yaw / 2)
+            self.orientation.z = math.sin(new_yaw / 2)
         else:
-            self.get_logger().error('Failed to apply force')
+            self.get_logger().warn(f'Unknown command: {command}')
+            return
+
+        # Добавляем статическое изменение координаты Z на 0.1
+        self.position.z = 0.1
+
+        # Отправка запроса на перемещение модели
+        request = SetEntityState.Request()
+        request.state.name = 'INSECTOID'
+        request.state.pose = Pose(position=self.position, orientation=self.orientation)
+        request.state.twist.linear = Twist().linear
+        request.state.twist.angular = Twist().angular
+        
+        self.future = self.client.call_async(request)
+        self.get_logger().info(f'Sent request to move model to position ({self.position.x}, {self.position.y}, {self.position.z})')
 
 def main(args=None):
     rclpy.init(args=args)
-    force_applier = ForceApplier()
-    rclpy.spin(force_applier)
-    force_applier.destroy_node()
-    rclpy.shutdown()
+    model_mover = ModelMover()
+    
+    try:
+        while True:
+            rclpy.spin_once(model_mover)
+            model_mover.move_model()
+    except KeyboardInterrupt:
+        model_mover.get_logger().info('Keyboard Interrupt (SIGINT)')
+    finally:
+        model_mover.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
