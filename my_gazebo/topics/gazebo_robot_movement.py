@@ -108,7 +108,7 @@ class ModelMover(Node):
         self.orientation.w = w
 
         # Добавляем статическое изменение координаты Z на 0.1
-        self.position.z = 0.1
+        self.position.z = 0.2
 
         # Отправка запроса на перемещение модели
         request = SetEntityState.Request()
