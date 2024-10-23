@@ -23,3 +23,4 @@ https://github.com/107-systems/l3xz_sweep_scanner (modified)
 
 dependencies:
 todo ~ ~
+pynput,
