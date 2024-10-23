@@ -15,11 +15,11 @@ def on_press(key):
             publisher.publish(msg)
         elif key.char == 'w':
             msg = String()
-            msg.data = 'F'
+            msg.data = 'B'
             publisher.publish(msg)
         elif key.char == 's':
             msg = String()
-            msg.data = 'B'
+            msg.data = 'F'
             publisher.publish(msg)
     except AttributeError:
         pass

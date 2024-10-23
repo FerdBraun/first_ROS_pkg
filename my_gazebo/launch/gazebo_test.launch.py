@@ -84,5 +84,5 @@ def generate_launch_description():
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
-        #slam_toolbox
+        slam_toolbox
     ])
