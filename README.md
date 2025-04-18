@@ -6,11 +6,6 @@
 7. Go to the ```ros_dev``` dir and rebuild the workspace by running the same command
 8. source the dir by running ```source install/setup.bash```
 
-sourses:
-
-https://github.com/fadlio/kinect_ros2?tab=readme-ov-file
-https://github.com/dawan0111/Simple-2D-LiDAR-Odometry (modified)
-https://github.com/107-systems/l3xz_sweep_scanner (modified)
 
 dependencies:
 1.
@@ -80,7 +75,18 @@ RVIZ
 rviz2 -d ~/Desktop/ros_dev/src/my_gazebo/rviz_config/rviz_view.rviz
 ```
 
+
 for real devices run 
 ```ros2 launch l3xz_sweep_scanner laser.launch.py``` for lidar
 and
 ```ros2 launch kinect_ros2 pointcloud.launch.py``` for kinect
+
+
+
+
+sourses:
+
+https://github.com/fadlio/kinect_ros2?tab=readme-ov-file
+https://github.com/dawan0111/Simple-2D-LiDAR-Odometry (modified)
+https://github.com/107-systems/l3xz_sweep_scanner (modified)
+
