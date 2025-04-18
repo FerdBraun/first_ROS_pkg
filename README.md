@@ -74,7 +74,10 @@ RVIZ
 ```
 rviz2 -d ~/Desktop/ros_dev/src/my_gazebo/rviz_config/rviz_view.rviz
 ```
-
+FOR AUTONOMOUS EXPLORATION 
+```
+ros2 launch my_gazebo explorer.launch.py 
+```
 
 for real devices run 
 ```ros2 launch l3xz_sweep_scanner laser.launch.py``` for lidar
