@@ -7,19 +7,19 @@ def on_press(key):
     try:
         if key.char == 'd':
             msg = String()
-            msg.data = 'L'
+            msg.data = 'R'
             publisher.publish(msg)
         elif key.char == 'a':
             msg = String()
-            msg.data = 'R'
+            msg.data = 'L'
             publisher.publish(msg)
         elif key.char == 'w':
             msg = String()
-            msg.data = 'B'
+            msg.data = 'F'
             publisher.publish(msg)
         elif key.char == 's':
             msg = String()
-            msg.data = 'F'
+            msg.data = 'B'
             publisher.publish(msg)
     except AttributeError:
         pass

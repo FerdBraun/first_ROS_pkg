@@ -2,7 +2,7 @@
 import rclpy
 from rclpy.node import Node
 from gazebo_msgs.srv import SetEntityState, GetEntityState
-from geometry_msgs.msg import Pose, Point, Quaternion, Twist
+from geometry_msgs.msg import Pose, Twist
 from std_msgs.msg import String
 import math
 from tf_transformations import quaternion_from_euler, euler_from_quaternion
@@ -20,6 +20,7 @@ class ModelMover(Node):
         self.position = None
         self.orientation = None
 
+        # Подписка на команды движения
         self.subscription = self.create_subscription(
             String,
             'spider_robot/command',
@@ -28,6 +29,9 @@ class ModelMover(Node):
 
         self.future = None
         self.get_state_future = None
+
+        # Параметры для движения
+        self.command = None
 
     def move_model(self):
         if self.future is not None and self.future.done():
@@ -93,9 +97,9 @@ class ModelMover(Node):
             self.position.x += backward_vector[0] * 0.1
             self.position.y += backward_vector[1] * 0.1
         elif self.command == 'L':
-            yaw -= math.radians(10)
-        elif self.command == 'R':
             yaw += math.radians(10)
+        elif self.command == 'R':
+            yaw -= math.radians(10)
         else:
             self.get_logger().warn(f'Unknown command: {self.command}')
             return
