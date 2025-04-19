@@ -19,7 +19,7 @@ class PathFollower(Node):
             Path,
             '/path',
             self.path_callback,
-            10
+            1  # Уменьшите размер очереди до 1
         )
 
         # Публикация команд для робота
@@ -32,20 +32,23 @@ class PathFollower(Node):
         # Параметры
         self.command_delay = 0.25  # Секунды
         self.distance_threshold = 0.1
-        self.angle_threshold_deg = 5  # Градусы
+        self.angle_threshold_deg = 10  # Градусы
 
         self.path = []
         self.current_index = 1
         self.last_command_time = time.time()
-        self.command_interval = 0.5  # Интервал между командами
+        self.command_interval = 0.2  # Интервал между командами
         self.timer = None
         self.busy = False
 
     def path_callback(self, msg):
         """Обработчик пути"""
+        self.get_logger().info("New path received. Resetting state...")
+
+        # Если уже обрабатывается путь, завершаем его
         if self.busy:
-            self.get_logger().warn("Already processing a path")
-            return
+            self.get_logger().warn("Already processing a path. Cancelling current path...")
+            self.cancel_current_path()
 
         if not msg.poses:
             self.get_logger().warn("Received empty path")
@@ -56,6 +59,7 @@ class PathFollower(Node):
             x, y = pose.pose.position.x, pose.pose.position.y
             self.get_logger().info(f"Original path point {i}: X={x:.2f}, Y={y:.2f}")
 
+        # Фильтрация слишком близких точек
         self.path = self.filter_close_points(msg.poses)
         if len(self.path) < 2:
             self.get_logger().warn("Path too short after filtering")
@@ -65,6 +69,18 @@ class PathFollower(Node):
         self.current_index = 1
         self.busy = True
         self.timer = self.create_timer(self.command_delay, self.timer_callback)
+
+    def cancel_current_path(self):
+        """Отмена текущего пути и сброс состояния"""
+        if self.timer is not None:
+            self.get_logger().info("Cancelling existing timer...")
+            self.timer.cancel()
+            self.timer = None
+        self.path = []
+        self.current_index = 1
+        self.last_command_time = time.time()
+        self.busy = False
+        self.get_logger().info("Current path cancelled and state reset.")
 
     def filter_close_points(self, poses):
         """Фильтрация слишком близких точек"""
@@ -77,10 +93,16 @@ class PathFollower(Node):
 
     def timer_callback(self):
         """Обработчик таймера для следования по пути"""
+        if not self.busy or not self.path:
+            self.get_logger().warn("No active path or busy flag is False. Cancelling timer.")
+            if self.timer is not None:
+                self.timer.cancel()
+                self.timer = None
+            return
+
         if self.current_index >= len(self.path):
             self.get_logger().info("Path completed")
-            self.timer.cancel()
-            self.busy = False
+            self.cancel_current_path()
             return
 
         # Получаем текущую и следующую точки
@@ -92,7 +114,7 @@ class PathFollower(Node):
         dy = next.y - curr.y
 
         # Угол к цели (atan2(dy, dx), так как вперед - ось Y)
-        target_angle = math.atan2(-dx,dy) 
+        target_angle = math.atan2(-dx, dy)
 
         # Получаем текущую позицию и ориентацию робота
         current_position, current_angle = self.get_robot_position_and_orientation()
@@ -134,7 +156,7 @@ class PathFollower(Node):
     def send_command(self, cmd):
         """Отправка команды роботу"""
         self.cmd_pub.publish(String(data=cmd))
-        self.get_logger().info(f"Sent command: {cmd}")
+        self.get_logger().info(f"Sent command: {cmd} at {time.time()}")
 
     def distance(self, p1, p2):
         """Расстояние между двумя точками"""
@@ -174,7 +196,7 @@ class PathFollower(Node):
             )
             
             return transform.transform.translation, euler_angles[2]  # Возвращаем yaw
-
+ 
         except Exception as e:
             self.get_logger().error(f'TF error: {str(e)}')
             return None, 0.0
