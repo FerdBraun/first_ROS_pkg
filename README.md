@@ -47,6 +47,10 @@ pip install pynput
 sudo apt install ros-foxy-twist-mux
 sudo apt install ros-foxy-nav2-*
 ```
+7.
+```
+sudo apt install ros-foxy-octomap-server ros-foxy-octomap-msgs ros-foxy-octomap-rviz-plugins
+```
 
 
 RUN
