@@ -29,7 +29,7 @@ def generate_launch_description():
                 {'use_colored_map': False},
             ],
             remappings=[
-                ('cloud_in', '/Camera/points'),
+                ('cloud_in', '/kinect/points'),
                 ('octomap_binary', '/octomap_3d'),
                 ('projected_map', '/map_2d'),
             ],

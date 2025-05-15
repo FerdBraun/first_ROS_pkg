@@ -5,7 +5,8 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
-
+from launch.substitutions import LaunchConfiguration
+from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 import xacro
 
@@ -74,6 +75,37 @@ def generate_launch_description():
         launch_arguments={'params_file': os.path.join(get_package_share_directory(pkg_name), 'description/mapper_params_online_async.yaml'),
                           'use_sim_time': 'true'}.items()
     )
+    laser_filter_config = os.path.join(
+        get_package_share_directory('my_gazebo'),
+        'description',
+        'laser_filter.yaml'
+    )
+    laser_filter = Node(
+        package="laser_filters",
+        executable="scan_to_scan_filter_chain",
+        name="filter1",
+        parameters=[{
+            'filter1': {
+                'name': 'filter1',
+                'type': 'laser_filters/LaserScanRangeFilter',
+                'params': {
+                    'lower_threshold': 0.25,
+                    'upper_threshold': 5.0,
+                    'lower_replacement_value': float('-inf'),
+                    'upper_replacement_value': float('inf')
+                }
+            }
+        }],
+        remappings=[
+                ('scan', '/l3xz/Laser'),
+                ('scan_filtered', '/scan_filtered')
+        ],
+    )
+
+
+
+
+
     # Run the node
     return LaunchDescription([
         gazebo,
@@ -84,5 +116,6 @@ def generate_launch_description():
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
+        laser_filter,
         slam_toolbox
     ])

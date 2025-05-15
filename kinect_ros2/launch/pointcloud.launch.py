@@ -13,12 +13,6 @@ def generate_launch_description():
         "kinect_ros2"
     )
     default_rviz_config_path = os.path.join(pkg_share, "rviz/pointcloud.rviz")
-    spider_robot_controllerV2_script = os.path.join(pkg_share, 'src/rotation.py')
-
-    spider_robot_controllerV2 = Node(executable=spider_robot_controllerV2_script,
-            name='rotation',
-            parameters=[{'use_sim_time': True}] 
-            )
     return LaunchDescription(
         [
             DeclareLaunchArgument(
@@ -31,6 +25,7 @@ def generate_launch_description():
                 executable="kinect_ros2_node",
                 name="kinect_ros2",
                 namespace="kinect",
+                parameters=[{'use_sim_time': True}],
             ),
             Node(
                 package="rviz2",
@@ -43,7 +38,8 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='depth_to_world_transform',
-            arguments=['0', '0', '0', '1.5708', '0', '-1.5708', 'world', 'kinect_depth']
+            parameters=[{'use_sim_time': True}],
+            arguments=['0', '0', '0.8', '0', '0', '-1.5708', 'base_link', 'kinect_depth']
             )
 
         ]

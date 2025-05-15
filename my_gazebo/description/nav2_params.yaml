@@ -9,15 +9,15 @@ amcl:
     base_frame_id: "base_footprint"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
-    beam_skip_threshold: 0.3
+    beam_skip_threshold: 0.5
     do_beamskip: false
     global_frame_id: "map"
     lambda_short: 0.1
     laser_likelihood_max_dist: 2.0
-    laser_max_range: 100.0
+    laser_max_range: 8.0
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
-    max_beams: 60
+    max_beams: 40
     max_particles: 2000
     min_particles: 500
     odom_frame_id: "odom"
@@ -33,11 +33,11 @@ amcl:
     transform_tolerance: 1.0
     update_min_a: 0.2
     update_min_d: 0.25
-    z_hit: 0.5
+    z_hit: 0.7
     z_max: 0.05
-    z_rand: 0.5
+    z_rand: 0.3
     z_short: 0.05
-    scan_topic: scan
+    scan_topic: /scan_filtered
 
 amcl_map_client:
   ros__parameters:
@@ -157,7 +157,7 @@ controller_server_rclcpp_node:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 5.0
+      update_frequency: 10.0
       publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_link
@@ -170,8 +170,8 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 2.0
+        inflation_radius: 0.3
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -180,18 +180,20 @@ local_costmap:
         z_resolution: 0.05
         z_voxels: 16
         max_obstacle_height: 2.0
-        mark_threshold: 0
+        mark_threshold: 2
         observation_sources: scan pointcloud_sensor
         scan:
-          topic: /scan
+          topic: /scan_filtered
           max_obstacle_height: 2.0
           clearing: True
           marking: True
           data_type: "LaserScan"
+          obstacle_range: 2.2  # Было 2.5 (можно уменьшить до 2.0)
+          raytrace_range: 5.0  # Было 3.0
         pointcloud_sensor:
-          topic: /Camera/points
-          sensor_frame: camera_link
-          max_obstacle_height: 2.0
+          topic: /kinect/points
+          sensor_frame: kinect_depth
+          max_obstacle_height: 0.4
           min_obstacle_height: 0.0
           obstacle_range: 2.5
           raytrace_range: 3.0
@@ -205,7 +207,7 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 4.0
+      update_frequency: 10.0
       publish_frequency: 2.0
       global_frame: map
       robot_base_frame: base_link
@@ -219,15 +221,17 @@ global_costmap:
         enabled: True
         observation_sources: scan pointcloud_sensor
         scan:
-          topic: /scan
+          topic: /scan_filtered
           max_obstacle_height: 2.0
           clearing: True
           marking: True
           data_type: "LaserScan"
+          obstacle_range: 2.2  # Было 2.5 (можно уменьшить до 2.0)
+          raytrace_range: 5.0  # Было 3.0
         pointcloud_sensor:
-          topic: /Camera/points
-          sensor_frame: camera_link
-          max_obstacle_height: 2.0
+          topic: /kinect/points
+          sensor_frame: kinect_depth
+          max_obstacle_height: 0.4
           min_obstacle_height: 0.0
           obstacle_range: 2.5
           raytrace_range: 3.0
@@ -239,8 +243,8 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 2.0
+        inflation_radius: 0.3
       always_send_full_costmap: True
   global_costmap_client:
     ros__parameters:

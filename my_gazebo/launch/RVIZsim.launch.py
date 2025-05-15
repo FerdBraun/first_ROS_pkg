@@ -42,12 +42,22 @@ def generate_launch_description():
         name='rviz2',
         output='screen'
     )
+    bridge_script = os.path.join(get_package_share_directory(pkg_name), 'topics/bridge_client.py')
 
+    bridge = Node(executable=bridge_script,
+            name='spider_robot_comannd_centerV2',
+            parameters=[{'use_sim_time': True}] )
 
     # Run the node
     return LaunchDescription([
-        node_robot_state_publisher,
-        joint_state_publisher_gui,
-        rviz2,
+        bridge,
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='depth_to_world_transform',
+            parameters=[{'use_sim_time': True}],
+            arguments=['0', '0', '0.8', '0', '0', '-1.5708', 'base_link', 'kinect_depth']
+            )
+
 
     ])

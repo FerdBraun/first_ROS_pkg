@@ -30,14 +30,14 @@ class PathFollower(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Параметры
-        self.command_delay = 0.25  # Секунды
-        self.distance_threshold = 0.1
-        self.angle_threshold_deg = 10  # Градусы
+        self.command_delay = 0.5  # Секунды
+        self.distance_threshold = 0.15
+        self.angle_threshold_deg = 20  # Градусы
 
         self.path = []
         self.current_index = 1
         self.last_command_time = time.time()
-        self.command_interval = 0.2  # Интервал между командами
+        self.command_interval = 1.5 # Интервал между командами
         self.timer = None
         self.busy = False
 

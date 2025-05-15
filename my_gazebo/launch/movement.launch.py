@@ -33,9 +33,16 @@ def generate_launch_description():
     command_sender = Node(executable=command_sender_script,
             name='command_sender',
             parameters=[{'use_sim_time': True}] )
+    
+    socket_sender_script = os.path.join(get_package_share_directory(pkg_name), 'topics/socket_transporter.py')
+
+    socket_sender = Node(executable=socket_sender_script,
+            name='socket_sender',
+            parameters=[{'use_sim_time': True}] )
 
     # Run the node
     return LaunchDescription([
-        gzrm,
-        command_sender
+        #gzrm,
+        command_sender,
+        socket_sender
     ])
