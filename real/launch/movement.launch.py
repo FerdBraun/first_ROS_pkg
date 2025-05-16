@@ -13,36 +13,23 @@ import xacro
 def generate_launch_description():
 
     # Specify the name of the package and path to xacro file within the package
-    pkg_name = 'my_gazebo'
-    file_subpath = 'description/example_robot.urdf.xacro'
-
-
-    # Use xacro to process the file
-    xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
-    robot_description_raw = xacro.process_file(xacro_file).toxml()
-
-
-    gzrm_script = os.path.join(get_package_share_directory(pkg_name), 'topics/gazebo_robot_movement.py')
-
-    gzrm = Node(executable=gzrm_script,
-            name='gzrm',
-            parameters=[{'use_sim_time': True}] )
+    pkg_name = 'real'
+ 
 
     command_sender_script = os.path.join(get_package_share_directory(pkg_name), 'topics/spider_robot_command_sender.py')
 
     command_sender = Node(executable=command_sender_script,
             name='command_sender',
-            parameters=[{'use_sim_time': True}] )
+            parameters=[{'use_sim_time': False}] )
     
     socket_sender_script = os.path.join(get_package_share_directory(pkg_name), 'topics/socket_transporter.py')
 
     socket_sender = Node(executable=socket_sender_script,
             name='socket_sender',
-            parameters=[{'use_sim_time': True}] )
+            parameters=[{'use_sim_time': False}] )
 
     # Run the node
     return LaunchDescription([
-        gzrm,
         command_sender,
-        #socket_sender
+        socket_sender
     ])

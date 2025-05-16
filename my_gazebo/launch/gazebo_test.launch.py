@@ -75,11 +75,6 @@ def generate_launch_description():
         launch_arguments={'params_file': os.path.join(get_package_share_directory(pkg_name), 'description/mapper_params_online_async.yaml'),
                           'use_sim_time': 'true'}.items()
     )
-    laser_filter_config = os.path.join(
-        get_package_share_directory('my_gazebo'),
-        'description',
-        'laser_filter.yaml'
-    )
     laser_filter = Node(
         package="laser_filters",
         executable="scan_to_scan_filter_chain",
@@ -97,13 +92,10 @@ def generate_launch_description():
             }
         }],
         remappings=[
-                ('scan', '/l3xz/Laser'),
+                ('scan', '/scan'),
                 ('scan_filtered', '/scan_filtered')
         ],
     )
-
-
-
 
 
     # Run the node
@@ -111,11 +103,8 @@ def generate_launch_description():
         gazebo,
         node_robot_state_publisher,
         spawn_entity,
-        #command_sender,
-        #spider_robot_controller,
         spider_robot_controllerV2,
         joint_trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
         laser_filter,
-        slam_toolbox
     ])

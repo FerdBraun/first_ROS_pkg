@@ -9,11 +9,11 @@ from launch_ros.substitutions import FindPackageShare
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
-    pkg_name = 'my_gazebo'
+    pkg_name = 'real'
     
     use_sim_time = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='true',
+        default_value='false',
         description='Use simulation (Gazebo) clock if true'
     )
     params_file = DeclareLaunchArgument(
@@ -47,7 +47,7 @@ def generate_launch_description():
         executable=cmd_vel_converter_script,
         name='cmd_vel_to_spider_commands',
         output='screen',
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': False}],
 
     )
 
@@ -62,7 +62,7 @@ def generate_launch_description():
         executable=planner_script,
         name='cmd_vel_quantizer',
         output='screen',
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': False}],
 
     )
 

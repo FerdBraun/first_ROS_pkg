@@ -6,6 +6,11 @@
 
 
 
+      <!-- Пример использования (можно вставить в нужное место) -->
+    <xacro:imu_sensor name="imu" parent_link="base_link">
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    </xacro:imu_sensor>
+    
 
     <joint name="camera_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="-1.571 0 -1.571" />
@@ -30,17 +35,23 @@
                 <image>
                     <width>640</width>
                     <height>480</height>
-                    <format>B8G8R8</format>
+                    <format>R8G8B8</format>  <!-- Более стандартный формат -->
                 </image>
                 <clip>
                     <near>0.05</near>
-                    <far>8.0</far>
+                    <far>4.0</far>  <!-- Уменьшаем с 8.0 м -->
                 </clip>
+                <noise>
+                    <type>gaussian</type>  <!-- Добавляем шум -->
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
             </camera>
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                 <frame_name>camera_link_optical</frame_name>
                 <min_depth>0.1</min_depth>
-                <max_depth>100</max_depth>
+                <max_depth>4.0</max_depth>  <!-- Синхронизируем с <far> -->
+                <point_cloud_cutoff>0.5</point_cloud_cutoff>  <!-- Новый параметр -->
             </plugin>
         </sensor>
     </gazebo>
