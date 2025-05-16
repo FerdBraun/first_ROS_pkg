@@ -47,6 +47,7 @@ pip install pynput
 sudo apt install ros-foxy-twist-mux
 sudo apt install ros-foxy-nav2-*
 sudo apt install ros-foxy-rtabmap-*
+sudo apt install ros-foxy-imu-tools
 ```
 7.
 ```
