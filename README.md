@@ -46,6 +46,7 @@ pip install pynput
 ```
 sudo apt install ros-foxy-twist-mux
 sudo apt install ros-foxy-nav2-*
+sudo apt install ros-foxy-rtabmap-*
 ```
 7.
 ```
@@ -53,24 +54,21 @@ sudo apt install ros-foxy-octomap-server ros-foxy-octomap-msgs ros-foxy-octomap-
 ```
 
 
-RUN
+RUN - Sumulation
 Main file 
 ```
 ros2 launch my_gazebo gazebo_test.launch.py world:=~/Desktop/ros_dev/src/my_gazebo/world/test_world.world
 ```
-Odometry
+SLAM + Odometry
 ```
-ros2 launch lidar_odometry lidar_odom.launch.py
+ros2 launch my_gazebo rmap.launch.py 
+
 ```
 Costmap
 ```
-ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
+ros2 launch my_gazebo nav2_bringup.launch.py 
 ```
-Path and navigations (via publishing point)
-```
-ros2 launch my_gazebo nav2_bringup.launch.py
-```
-Moving Nodes (currently for simulations)
+Moving Nodes 
 ```
 ros2 launch my_gazebo movement.launch.py
 ```
@@ -83,17 +81,61 @@ FOR AUTONOMOUS EXPLORATION
 ros2 launch my_gazebo explorer.launch.py 
 ```
 
-for real devices run 
-```ros2 launch l3xz_sweep_scanner laser.launch.py``` for lidar
-and
-```ros2 launch kinect_ros2 pointcloud.launch.py``` for kinect
+RUN - Real robot
+
+Main file 
+```
+ros2 launch real realLife.launch.py 
+```
+Kinect
+```
+ros2 launch kinect_ros2 pointcloud.launch.py
+```
+
+Run and connect  Imu server with android device, then
+
+```
+ros2 launch real IMUBridge.launch.py 
+```
+Dont forget to change IPs
+
+
+SLAM + Odometry
+```
+ros2 launch real rmap.launch.py 
+
+```
+Costmap
+```
+ros2 launch real nav2_bringup.launch.py 
+```
+Moving Nodes 
+```
+ros2 launch real movement.launch.py
+```
+Dont forget to run robot movement server
+
+RVIZ
+```
+rviz2 -d ~/Desktop/ros_dev/src/my_gazebo/rviz_config/rviz_view.rviz
+```
+FOR AUTONOMOUS EXPLORATION 
+```
+ros2 launch real explorer.launch.py 
+```
+
+
+
+
+
+
 
 
 
 
 sourses:
 
-https://github.com/fadlio/kinect_ros2?tab=readme-ov-file
+https://github.com/fadlio/kinect_ros2?tab=readme-ov-file (modified)
 https://github.com/dawan0111/Simple-2D-LiDAR-Odometry (modified)
 https://github.com/107-systems/l3xz_sweep_scanner (modified)
 
