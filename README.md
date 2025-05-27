@@ -16,47 +16,47 @@ sudo apt-get update
 sudo apt-get install libusb-1.0-0-dev
 ```
 2.
-install libfreekeenect 
-
-sudo make install
-https://github.com/OpenKinect/libfreenect
-
-3.
 ```
 sudo apt-get install ros-foxy-depth-image-proc
 sudo apt-get install ros-foxy-camera-info-manager
 ```
-4.
+3.
 ```
 sudo apt install ros-foxy-xacro
 sudo apt install ros-foxy-gazebo-ros-pkgs
-sudo apt install ros-foxy-slam-toolbox
 sudo apt install ros-foxy-controller-manager
 sudo apt install ros-foxy-ros2-control
 sudo apt install ros-foxy-ros2-controllers
 sudo apt install ros-foxy-gazebo-ros2-control
 sudo apt install ros-foxy-tf-transformations
 ```
-5.
+4.
 ```
 sudo pip3 install transforms3d
 pip install pynput
 ```
-6.
+5.
 ```
 sudo apt install ros-foxy-twist-mux
 sudo apt install ros-foxy-nav2-*
+sudo apt install ros-foxy-rtabmap-*
+sudo apt install ros-foxy-imu-tools
 ```
-
+6.
+```
+sudo apt install ros-foxy-octomap-server 
+sudo apt install ros-foxy-octomap-msgs 
+sudo apt install ros-foxy-octomap-rviz-plugins
+```
 
 RUN
 Main file 
 ```
-ros2 launch my_gazebo gazebo_test.launch.py world:=~/Desktop/ros_dev/src/my_gazebo/world/test_world.world
+ros2 launch my_gazebo gazebo_test.launch.py
 ```
-Odometry
+Odometry + SLAM
 ```
-ros2 launch lidar_odometry lidar_odom.launch.py
+ros2 launch my_gazebo rmap.launch.py
 ```
 Costmap
 ```
@@ -66,23 +66,19 @@ Path and navigations (via publishing point)
 ```
 ros2 launch my_gazebo nav2_bringup.launch.py
 ```
-Moving Nodes (currently for simulations)
+Moving Nodes 
 ```
 ros2 launch my_gazebo movement.launch.py
 ```
 RVIZ
 ```
-rviz2 -d ~/Desktop/ros_dev/src/my_gazebo/rviz_config/rviz_view.rviz
+ros2 launch my_gazebo rviz.launch.py
 ```
 FOR AUTONOMOUS EXPLORATION 
 ```
 ros2 launch my_gazebo explorer.launch.py 
 ```
 
-for real devices run 
-```ros2 launch l3xz_sweep_scanner laser.launch.py``` for lidar
-and
-```ros2 launch kinect_ros2 pointcloud.launch.py``` for kinect
 
 
 
@@ -90,6 +86,5 @@ and
 sourses:
 
 https://github.com/fadlio/kinect_ros2?tab=readme-ov-file
-https://github.com/dawan0111/Simple-2D-LiDAR-Odometry (modified)
-https://github.com/107-systems/l3xz_sweep_scanner (modified)
+
 
