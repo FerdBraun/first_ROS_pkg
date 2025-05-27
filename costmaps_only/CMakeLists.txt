@@ -20,6 +20,8 @@ target_include_directories(costmaps_server_node PRIVATE
   include
   ${nav2_util_INCLUDE_DIRS}
   ${nav2_costmap_2d_INCLUDE_DIRS}
+  /opt/ros/jazzy/include/nav2_costmap_2d  # Явное указание пути
+  /opt/ros/jazzy/include  # Общий путь
 )
 
 # Линковка библиотек
@@ -29,8 +31,12 @@ target_link_libraries(costmaps_server_node
   ${tf2_ros_LDFLAGS}
   ${nav2_util_LIBRARIES}
   ${nav2_costmap_2d_LIBRARIES}
-)
 
+)
+ament_target_dependencies(costmaps_server_node
+  nav2_costmap_2d
+  nav2_util
+)
 # Установка исполняемого файла
 install(TARGETS costmaps_server_node
   DESTINATION lib/${PROJECT_NAME}

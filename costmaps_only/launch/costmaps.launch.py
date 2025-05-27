@@ -13,19 +13,25 @@ def generate_launch_description():
 
     return LaunchDescription([
         Node(
-            package='nav2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='lifecycle_manager_costmaps',
-            output='screen',
-            parameters=[{'autostart': True},
-                        {'node_names': ['costmaps_server']}]
-        ),
-        Node(
             package='costmaps_only',
             executable='costmaps_server_node',
             name='costmaps_server',
             output='screen',
-            parameters=[params_file]
+            parameters=[params_file],
+            # Добавляем эти параметры
+            respawn=True,
+            respawn_delay=2.0
         ),
-        
+        Node(
+            package='nav2_lifecycle_manager',
+            executable='lifecycle_manager',
+            name='lifecycle_manager_costmaps',
+            output='screen',
+            parameters=[{
+                'autostart': True,
+                'node_names': ['costmaps_server'],
+                'bond_timeout': 10.0,  # Увеличиваем время ожидания
+                'bond_heartbeat_period': 0.5
+            }]
+        )
     ])

@@ -9,7 +9,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
-    pkg_name = 'my_gazebo'
+    pkg_name = 'real'
     
     nav2_launch = IncludeLaunchDescription(
         PathJoinSubstitution([
@@ -18,11 +18,23 @@ def generate_launch_description():
             'costmaps.launch.py'
         ]),
     )
-    # РџСѓС‚СЊ Рє СЃРєСЂРёРїС‚Сѓ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РєРѕРјР°РЅРґ СЃРєРѕСЂРѕСЃС‚Рё
+    # Путь к скрипту преобразования команд скорости
     controller_script = os.path.join(
         get_package_share_directory(pkg_name),
         'topics',
         'controller.py'
+    )
+    mapnav2_script = os.path.join(
+        get_package_share_directory(pkg_name),
+        'topics',
+        'nav2MapTranslator.py'
+    )
+    mapnav2 = Node(
+        executable=mapnav2_script,
+        name='mapnav2',
+        output='screen',
+        parameters=[{'use_sim_time': False}],
+
     )
     controller = Node(
         executable=controller_script,
@@ -32,7 +44,7 @@ def generate_launch_description():
 
     )
 
-    # РЈР·Р»С‹ NAV2
+    # Узлы NAV2
     planner_script = os.path.join(
         get_package_share_directory(pkg_name),
         'topics',
@@ -48,6 +60,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+                                mapnav2,
                                 nav2_launch,
                                 controller,
                                 planner

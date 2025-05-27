@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-    pkg_name = 'my_gazebo'
+    pkg_name = 'real'
     
 
     explorer_script = os.path.join(
@@ -17,7 +17,7 @@ def generate_launch_description():
         executable=explorer_script,
         name='explorer',
         output='screen',
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': False}],
 
     )
 
