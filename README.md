@@ -58,10 +58,6 @@ Odometry + SLAM
 ```
 ros2 launch my_gazebo rmap.launch.py
 ```
-Costmap
-```
-ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
-```
 Path and navigations (via publishing point)
 ```
 ros2 launch my_gazebo nav2_bringup.launch.py
