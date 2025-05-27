@@ -2,11 +2,13 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <!--Models-->
-    <xacro:property name="base_path" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/base1.dae" />
-    <xacro:property name="arm_path_1" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-1.dae" />
-    <xacro:property name="arm_path_2" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-2.dae" />
-    <xacro:property name="arm_path_3" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/l-3.dae" />
-    <xacro:property name="camera" value="file:////home/zega/Desktop/ros_dev/src/my_gazebo/meshes/kinect.dae" />
+    <xacro:property name="package_root" value="$(find my_gazebo)" />
+    <xacro:property name="meshes_dir" value="${package_root}/meshes" />
+    <xacro:property name="base_path" value="${meshes_dir}/base1.dae" />
+    <xacro:property name="arm_path_1" value="${meshes_dir}/l-1.dae" />
+    <xacro:property name="arm_path_2" value="${meshes_dir}/l-2.dae" />
+    <xacro:property name="arm_path_3" value="${meshes_dir}/l-3.dae" />
+    <xacro:property name="camera" value="${meshes_dir}/kinect.dae" />
  <!--Models-->
     <material name="white">
         <color rgba="1 1 1 1" />
