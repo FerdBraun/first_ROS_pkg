@@ -2,64 +2,92 @@
 import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Path
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 from geometry_msgs.msg import PoseStamped, PointStamped
 import math
 from tf2_ros import Buffer, TransformListener
 from tf2_geometry_msgs import do_transform_point
 from tf_transformations import euler_from_quaternion
 import time
-
+#working
 class PathFollower(Node):
     def __init__(self):
         super().__init__('path_follower')
-
-        # Подписка на путь
-        self.subscription = self.create_subscription(
+        
+        # Подписки
+        self.path_sub = self.create_subscription(
             Path,
             '/path',
             self.path_callback,
-            1  # Уменьшите размер очереди до 1
-        )
-
-        # Публикация команд для робота
+            1)
+            
+        self.stop_sub = self.create_subscription(
+            Bool,
+            '/stop_planning',
+            self.stop_callback,
+            10)
+        
+        # Публикаторы
         self.cmd_pub = self.create_publisher(String, '/spider_robot/command', 10)
-
-        # TF для получения ориентации робота
+        self.status_pub = self.create_publisher(String, '/follower_status', 10)
+        
+        # TF
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
-
+        
         # Параметры
         self.command_delay = 0.5  # Секунды
-        self.distance_threshold = 0.15
+        self.distance_threshold = 0.15  # Метры
         self.angle_threshold_deg = 20  # Градусы
-
+        self.min_path_length = 0.3  # Минимальная длина пути (синхронизировано с планировщиком)
+        self.command_interval = 1.5  # Интервал между командами
+        
+        # Состояние
         self.path = []
         self.current_index = 1
         self.last_command_time = time.time()
-        self.command_interval = 1.5 # Интервал между командами
         self.timer = None
+        self.is_active = True
         self.busy = False
+
+    def stop_callback(self, msg):
+        """Обработчик команды остановки"""
+        self.is_active = not msg.data
+        status = "STOPPED" if msg.data else "ACTIVE"
+        self.status_pub.publish(String(data=f"Follower {status}"))
+        self.get_logger().warn(f"Follower received stop command. New state: {status}")
+        
+        if msg.data:
+            self.cancel_current_path()
+            self.send_stop_command()
+
+    def send_stop_command(self):
+        """Отправка команды остановки роботу"""
+        self.cmd_pub.publish(String(data="S"))
+        self.get_logger().info("Sent STOP command to robot")
 
     def path_callback(self, msg):
         """Обработчик пути"""
+        if not self.is_active:
+            self.get_logger().warn("Follower is stopped, ignoring path")
+            return
+            
         self.get_logger().info("New path received. Resetting state...")
-
-        # Если уже обрабатывается путь, завершаем его
+        
         if self.busy:
-            self.get_logger().warn("Already processing a path. Cancelling current path...")
+            self.get_logger().warn("Cancelling current path...")
             self.cancel_current_path()
 
         if not msg.poses:
             self.get_logger().warn("Received empty path")
             return
 
-        # Логирование первых точек пути
-        for i, pose in enumerate(msg.poses[:3]):
-            x, y = pose.pose.position.x, pose.pose.position.y
-            self.get_logger().info(f"Original path point {i}: X={x:.2f}, Y={y:.2f}")
+        # Проверка длины пути
+        path_length = self.calculate_path_length(msg.poses)
+        if path_length < self.min_path_length:
+            self.get_logger().warn(f"Path too short ({path_length:.2f}m), ignoring")
+            return
 
-        # Фильтрация слишком близких точек
         self.path = self.filter_close_points(msg.poses)
         if len(self.path) < 2:
             self.get_logger().warn("Path too short after filtering")
@@ -70,17 +98,16 @@ class PathFollower(Node):
         self.busy = True
         self.timer = self.create_timer(self.command_delay, self.timer_callback)
 
-    def cancel_current_path(self):
-        """Отмена текущего пути и сброс состояния"""
-        if self.timer is not None:
-            self.get_logger().info("Cancelling existing timer...")
-            self.timer.cancel()
-            self.timer = None
-        self.path = []
-        self.current_index = 1
-        self.last_command_time = time.time()
-        self.busy = False
-        self.get_logger().info("Current path cancelled and state reset.")
+    def calculate_path_length(self, poses):
+        """Вычисление длины пути"""
+        if len(poses) < 2:
+            return 0.0
+            
+        length = 0.0
+        for i in range(1, len(poses)):
+            length += math.hypot(poses[i].pose.position.x - poses[i-1].pose.position.x,
+                               poses[i].pose.position.y - poses[i-1].pose.position.y)
+        return length
 
     def filter_close_points(self, poses):
         """Фильтрация слишком близких точек"""
@@ -91,10 +118,22 @@ class PathFollower(Node):
                 filtered.append(pose)
         return filtered
 
+    def cancel_current_path(self):
+        """Отмена текущего пути"""
+        if self.timer is not None:
+            self.get_logger().info("Cancelling timer...")
+            self.timer.cancel()
+            self.timer = None
+            
+        self.path = []
+        self.current_index = 1
+        self.last_command_time = time.time()
+        self.busy = False
+        self.get_logger().info("Current path cancelled")
+
     def timer_callback(self):
         """Обработчик таймера для следования по пути"""
-        if not self.busy or not self.path:
-            self.get_logger().warn("No active path or busy flag is False. Cancelling timer.")
+        if not self.is_active or not self.busy or not self.path:
             if self.timer is not None:
                 self.timer.cancel()
                 self.timer = None
@@ -109,11 +148,11 @@ class PathFollower(Node):
         curr = self.path[self.current_index - 1].pose.position
         next = self.path[self.current_index].pose.position
 
-        # Вектор направления (для робота вперед - это ось Y)
+        # Вектор направления
         dx = next.x - curr.x
         dy = next.y - curr.y
 
-        # Угол к цели (atan2(dy, dx), так как вперед - ось Y)
+        # Угол к цели
         target_angle = math.atan2(-dx, dy)
 
         # Получаем текущую позицию и ориентацию робота
@@ -133,8 +172,7 @@ class PathFollower(Node):
             f"Direction vector: X:{dx:.2f}, Y:{dy:.2f}\n"
             f"Target angle: {math.degrees(target_angle):.1f}°\n"
             f"Current angle: {math.degrees(current_angle):.1f}°\n"
-            f"Angle diff: {angle_diff_deg:.1f}°"
-        )
+            f"Angle diff: {angle_diff_deg:.1f}°")
 
         # Проверяем временной интервал
         current_time = time.time()
@@ -156,14 +194,14 @@ class PathFollower(Node):
     def send_command(self, cmd):
         """Отправка команды роботу"""
         self.cmd_pub.publish(String(data=cmd))
-        self.get_logger().info(f"Sent command: {cmd} at {time.time()}")
+        self.get_logger().info(f"Sent command: {cmd}")
 
     def distance(self, p1, p2):
         """Расстояние между двумя точками"""
         return math.hypot(p2.x - p1.x, p2.y - p1.y)
 
     def normalize_angle(self, angle):
-        """Нормализация угла в диапазоне от -π до π"""
+        """Нормализация угла"""
         while angle > math.pi:
             angle -= 2 * math.pi
         while angle < -math.pi:
@@ -171,7 +209,7 @@ class PathFollower(Node):
         return angle
 
     def get_robot_position_and_orientation(self):
-        """Получение текущей позиции и ориентации робота"""
+        """Получение позиции и ориентации робота"""
         try:
             transform = self.tf_buffer.lookup_transform(
                 'map',
@@ -179,7 +217,6 @@ class PathFollower(Node):
                 rclpy.time.Time(),
                 timeout=rclpy.duration.Duration(seconds=1.0))
             
-            # Преобразуем кватернион в эйлеровы углы
             quaternion = [
                 transform.transform.rotation.x,
                 transform.transform.rotation.y,
@@ -187,13 +224,6 @@ class PathFollower(Node):
                 transform.transform.rotation.w
             ]
             euler_angles = euler_from_quaternion(quaternion)
-            
-            # Логирование информации о трансформации
-            self.get_logger().info(
-                f"Robot transform:\n"
-                f"Position: X={transform.transform.translation.x:.2f}, Y={transform.transform.translation.y:.2f}\n"
-                f"Orientation (yaw): {math.degrees(euler_angles[2]):.1f}°"
-            )
             
             return transform.transform.translation, euler_angles[2]  # Возвращаем yaw
  
